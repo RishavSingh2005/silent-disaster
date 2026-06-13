@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Silent Disaster — Early Signal System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     Loading Overlay (hidden after data loads)
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="loadingOverlay">
+  <span>Initializing data engine&nbsp;&nbsp;—</span>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     LANDING PAGE
+═══════════════════════════════════════════════════════════════════════════ -->
+<section id="landing">
+
+  <header class="landing-header">
+    <div class="system-wordmark">
+      <div class="wordmark-sigil"></div>
+      <span class="wordmark-text">Silent Disaster</span>
+    </div>
+    <span class="landing-meta">Flood Risk · Early Signal System · India v1.0</span>
+  </header>
+
+  <div class="landing-hero">
+    <div class="hero-content">
+
+      <div class="hero-left">
+        <h1>Risk awareness<br/>before a disaster<br/><em>becomes one.</em></h1>
+        <p class="hero-tagline">
+          A transparent, rule-based environmental monitoring system
+          that surfaces early flood risk signals for Indian regions —
+          before damage makes the situation visible.
+        </p>
+        <button class="btn-primary" onclick="openDashboard()">Open Risk Dashboard</button>
+      </div>
+
+      <div class="hero-right">
+        <div class="context-block">
+          <div class="context-label">Why this matters</div>
+          <p>
+            Most flood-related decisions happen after conditions are already
+            critical. Drainage systems overflow, evacuation routes flood, and
+            emergency resources are deployed reactively. This system is designed
+            to shift that window earlier — not to predict, but to flag when
+            environmental signals are trending toward risk.
+          </p>
+        </div>
+
+        <div class="context-block">
+          <div class="context-label">What this is not</div>
+          <p>
+            This is not a machine learning system. There is no black box.
+            Every score is generated from transparent, auditable rules based on
+            rainfall trends, historical flood sensitivity, and temperature
+            interactions. The logic is fully readable.
+          </p>
+        </div>
+
+        <div class="context-block">
+          <div class="context-label">What this covers</div>
+          <p>
+            Eight Indian cities with distinct flood risk profiles — from the
+            Brahmaputra basin in Assam to the semi-arid plateau of Rajasthan.
+            Each region is assessed on 7-day or 14-day environmental windows.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="landing-footer">
+    <span>Environmental data: simulated from historical patterns</span>
+    <span>Risk logic: transparent, rule-based · No ML involved</span>
+  </footer>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     DASHBOARD PAGE
+═══════════════════════════════════════════════════════════════════════════ -->
+<section id="dashboard">
+
+  <!-- Navigation -->
+  <nav class="dash-nav">
+    <div class="nav-brand">
+      <div class="nav-brand-dot"></div>
+      <span class="nav-brand-name">Silent Disaster · Risk Dashboard</span>
+    </div>
+    <div class="nav-right">
+      <button class="nav-back" onclick="closeDashboard()">← Back to Overview</button>
+      <span class="nav-timestamp" id="navTimestamp">—</span>
+    </div>
+  </nav>
+
+  <!-- Controls -->
+  <div class="controls-bar">
+    <div class="control-group">
+      <span class="control-label">Region</span>
+      <select id="regionSelect"></select>
+    </div>
+    <div class="control-group">
+      <span class="control-label">Window</span>
+      <button class="window-btn active" data-days="7">Last 7 Days</button>
+      <button class="window-btn" data-days="14">Last 14 Days</button>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <div class="dash-main">
+
+    <!-- Sidebar: Risk Score + Region Context -->
+    <aside class="dash-sidebar">
+
+      <!-- Risk Score -->
+      <div>
+        <div class="section-header">
+          <div class="section-title">Current Risk Assessment</div>
+        </div>
+        <div class="risk-panel">
+          <div class="risk-score-row">
+            <span class="risk-score-number" id="riskScore">—</span>
+            <span class="risk-level-badge" id="riskLevel">—</span>
+          </div>
+          <div class="risk-bar-track">
+            <div class="risk-bar-fill" id="riskScoreBar" style="width:0%"></div>
+          </div>
+          <p id="riskDescription">Loading assessment…</p>
+        </div>
+      </div>
+
+      <!-- Region Context -->
+      <div>
+        <div class="section-header">
+          <div class="section-title">Region Profile</div>
+        </div>
+        <div class="region-info">
+          <div class="region-stat-row">
+            <span class="region-stat-key">Avg Annual Rainfall</span>
+            <span class="region-stat-val" id="regionAvgRainfall">—</span>
+          </div>
+          <div class="region-stat-row">
+            <span class="region-stat-key">Flood Events on Record</span>
+            <span class="region-stat-val" id="regionFloodYears">—</span>
+          </div>
+          <p id="regionNote">—</p>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="dash-content">
+
+      <!-- Environmental Trend Charts -->
+      <div>
+        <div class="section-header">
+          <div class="section-title">Environmental Trends</div>
+          <div class="section-subtitle">Daily observations over the selected window</div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-panel">
+            <div class="chart-title">Rainfall (mm / day)</div>
+            <canvas id="rainfallChart" width="480" height="200"></canvas>
+          </div>
+          <div class="chart-panel">
+            <div class="chart-title">Temperature (°C)</div>
+            <canvas id="temperatureChart" width="480" height="200"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Why This Risk Explanation -->
+      <div>
+        <div class="section-header">
+          <div class="section-title">Risk Factor Analysis</div>
+          <div class="section-subtitle">Breakdown of each contributing factor with scores</div>
+        </div>
+        <div class="explanation-grid" id="explanationPanel">
+          <!-- Populated by dashboard.js -->
+        </div>
+      </div>
+
+      <!-- Data Transparency -->
+      <div class="transparency-section">
+        <div class="section-header">
+          <div class="section-title">Data Transparency</div>
+        </div>
+        <p class="transparency-note">
+          The following table shows every value used in this assessment — the raw
+          environmental measurements, the historical parameters, and the exact
+          scores assigned by each rule. Nothing is hidden or approximated.
+          Risk scores are deterministic: same inputs will always produce the same output.
+        </p>
+        <div class="data-table-wrap">
+          <table class="data-table">
+            <tbody id="transparencyTable">
+              <!-- Populated by dashboard.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     SCRIPTS
+═══════════════════════════════════════════════════════════════════════════ -->
+<script src="js/risk-engine.js"></script>
+<script src="js/dashboard.js"></script>
+<script>
+  function openDashboard() {
+    document.getElementById("landing").style.display = "none";
+    document.getElementById("dashboard").style.display = "block";
+    // Set live timestamp in nav
+    const now = new Date();
+    document.getElementById("navTimestamp").textContent =
+      now.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) +
+      " · " + now.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" });
+  }
+
+  function closeDashboard() {
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("landing").style.display = "flex";
+  }
+</script>
+
+</body>
+</html>
